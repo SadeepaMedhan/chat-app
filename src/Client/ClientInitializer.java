@@ -4,8 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+
+import static javafx.scene.paint.Color.TRANSPARENT;
 
 public class ClientInitializer extends Application {
 
@@ -15,7 +18,11 @@ public class ClientInitializer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("ChatForm.fxml"))));
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("LoginForm.fxml")));
+        scene.setFill(TRANSPARENT);
+        scene.getStylesheets().add("Client/styles/style.css");
+        primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
     }
 }
