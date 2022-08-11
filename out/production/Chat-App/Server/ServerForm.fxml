@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -13,7 +14,10 @@
 
 <AnchorPane prefHeight="666.0" prefWidth="772.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Server.ServerFormController">
    <children>
-      <TextField fx:id="txtServerMessage" layoutX="188.0" layoutY="600.0" prefHeight="37.0" prefWidth="403.0" />
+      <TextField fx:id="txtServerMessage" layoutX="188.0" layoutY="600.0" prefHeight="37.0" prefWidth="403.0">
+         <padding>
+            <Insets left="40.0" />
+         </padding></TextField>
       <ImageView fitHeight="27.0" fitWidth="36.0" layoutX="199.0" layoutY="605.0" onMouseClicked="#uploadImageOnAction" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Client/assets/icon/camaraIcon.png" />

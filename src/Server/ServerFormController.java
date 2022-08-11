@@ -2,6 +2,7 @@ package Server;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
@@ -11,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -48,8 +50,11 @@ public class ServerFormController {
                         //System.out.println(record);
                         HBox hBox = new HBox();
                         hBox.setAlignment(Pos.CENTER_LEFT);
+                        hBox.setPadding(new Insets(5,5,5,10));
                         Text text = new Text(record);
                         TextFlow textFlow = new TextFlow(text);
+                        textFlow.setStyle("-fx-background-color: #aaaeb1; -fx-background-radius: 20px");
+                        textFlow.setPadding(new Insets(5,10,5,10));
                         hBox.getChildren().add(textFlow);
                         Platform.runLater(new Runnable() {
                             @Override
@@ -77,8 +82,12 @@ public class ServerFormController {
 
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_RIGHT);
+        hBox.setPadding(new Insets(5,5,5,10));
         Text text = new Text(myReply);
         TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color: #0868a7; -fx-background-radius: 20px");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        text.setFill(Color.color(1,1,1));
         hBox.getChildren().add(textFlow);
         chatContext.getChildren().add(hBox);
         txtServerMessage.clear();
