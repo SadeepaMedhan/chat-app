@@ -1,7 +1,11 @@
 package Server;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +16,7 @@ import java.net.Socket;
 
 public class ServerFormController {
     public TextField txtServerMessage;
+    public TextArea txtServerPane;
     String message = "";
     Socket accept=null;
     public void initialize(){
@@ -28,7 +33,11 @@ public class ServerFormController {
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         String record = bufferedReader.readLine();
                         message = record;
-                        System.out.println(record);
+                        //System.out.println(record);
+                        Text text = new Text(record);
+                        text.prefWidth(txtServerPane.getWidth());
+                        text.setTextAlignment(TextAlignment.LEFT);
+                        txtServerPane.appendText("client : "+text.getText()+"\n");
                     }else{
                         return;
                     }
@@ -41,8 +50,14 @@ public class ServerFormController {
     }
 
     public void sendOnAction(ActionEvent actionEvent) throws IOException {
+        String myReply = txtServerMessage.getText();
+
         PrintWriter printWriter = new PrintWriter(accept.getOutputStream());
-        printWriter.println(txtServerMessage.getText());
+        printWriter.println(myReply);
         printWriter.flush();
+        Text text = new Text(myReply);
+        text.prefWidth(txtServerPane.getWidth());
+        text.setTextAlignment(TextAlignment.RIGHT);
+        txtServerPane.appendText(text.getText()+"\n");
     }
 }

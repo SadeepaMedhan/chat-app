@@ -1,6 +1,7 @@
 package Client;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.io.BufferedReader;
@@ -9,10 +10,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientFormController {
+public class ChatFormController {
     public TextField txtClientMessage;
+    public TextArea txtClientPane;
     Socket socket = null;
-    String message = "";
+    String reply = "";
 
     public void initialize() throws IOException {
         new Thread(()->{
@@ -20,12 +22,13 @@ public class ClientFormController {
                 socket = new Socket("localhost",5000);
 
             while (true){
-                if(!message.equals("exit")){
+                if(!reply.equals("exit")){
                     InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     String record = bufferedReader.readLine();
-                    message = record;
-                    System.out.println(record);
+                    reply = record;
+                    //System.out.println(record);
+                    txtClientPane.appendText("server : "+record+"\n");
                 }else{
                     return;
                 }
@@ -37,8 +40,10 @@ public class ClientFormController {
     }
 
     public void sendOnAction(ActionEvent actionEvent) throws IOException {
+        String reply = txtClientMessage.getText();
         PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
-        printWriter.println(txtClientMessage.getText());
+        printWriter.println(reply);
         printWriter.flush();
+        txtClientPane.appendText("me : "+reply+"\n");
     }
 }

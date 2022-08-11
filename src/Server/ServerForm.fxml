@@ -11,7 +11,7 @@
    <children>
       <Label layoutX="73.0" layoutY="26.0" prefHeight="39.0" prefWidth="73.0" text="Server" />
       <Separator layoutX="73.0" layoutY="64.0" prefHeight="3.0" prefWidth="498.0" />
-      <TextArea layoutX="67.0" layoutY="80.0" prefHeight="226.0" prefWidth="498.0" />
+      <TextArea fx:id="txtServerPane" editable="false" layoutX="67.0" layoutY="80.0" prefHeight="226.0" prefWidth="498.0" AnchorPane.leftAnchor="67.0" />
       <Button layoutX="492.0" layoutY="340.0" mnemonicParsing="false" onAction="#sendOnAction" prefHeight="25.0" prefWidth="73.0" text="Send" />
       <TextField fx:id="txtServerMessage" layoutX="67.0" layoutY="340.0" prefHeight="25.0" prefWidth="403.0" />
    </children>
