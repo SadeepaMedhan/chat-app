@@ -1,24 +1,36 @@
 package Server;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerFormController {
     public TextField txtServerMessage;
     public TextArea txtServerPane;
+    public VBox chatContext;
     String message = "";
     Socket accept=null;
+    FileChooser fileChooser = new FileChooser();
+
+
+
     public void initialize(){
         new Thread(() -> {
             try {
@@ -34,10 +46,17 @@ public class ServerFormController {
                         String record = bufferedReader.readLine();
                         message = record;
                         //System.out.println(record);
+                        HBox hBox = new HBox();
+                        hBox.setAlignment(Pos.CENTER_LEFT);
                         Text text = new Text(record);
-                        text.prefWidth(txtServerPane.getWidth());
-                        text.setTextAlignment(TextAlignment.LEFT);
-                        txtServerPane.appendText("client : "+text.getText()+"\n");
+                        TextFlow textFlow = new TextFlow(text);
+                        hBox.getChildren().add(textFlow);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                chatContext.getChildren().add(hBox);
+                            }
+                        });
                     }else{
                         return;
                     }
@@ -55,9 +74,28 @@ public class ServerFormController {
         PrintWriter printWriter = new PrintWriter(accept.getOutputStream());
         printWriter.println(myReply);
         printWriter.flush();
+
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_RIGHT);
         Text text = new Text(myReply);
-        text.prefWidth(txtServerPane.getWidth());
-        text.setTextAlignment(TextAlignment.RIGHT);
-        txtServerPane.appendText(text.getText()+"\n");
+        TextFlow textFlow = new TextFlow(text);
+        hBox.getChildren().add(textFlow);
+        chatContext.getChildren().add(hBox);
+        txtServerMessage.clear();
+    }
+
+    public void uploadImageOnAction(MouseEvent mouseEvent) {
+        Stage stage = new Stage();
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            System.out.println(file.getAbsolutePath());
+            Image image = new Image(getClass().getResourceAsStream(file.getAbsolutePath()));
+            ImageView imageView = new ImageView(image);
+            chatContext.getChildren().add(imageView);
+        }
+    }
+
+    public void closeOnAction(MouseEvent mouseEvent) {
+        System.exit(0);
     }
 }

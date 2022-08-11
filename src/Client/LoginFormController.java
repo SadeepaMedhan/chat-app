@@ -24,6 +24,7 @@ public class LoginFormController {
             Stage stage = (Stage) loginFormContext.getScene().getWindow();
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("ChatForm.fxml"))));
             //stage.setResizable(false);
+
             stage.centerOnScreen();
             stage.show();
         }else{
