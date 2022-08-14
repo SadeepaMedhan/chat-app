@@ -21,8 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
-
-import static Client.LoginFormController.userName;
+import static Server.Server.userName;
 
 public class ChatFormController {
     public TextField txtClientMessage;
@@ -31,15 +30,10 @@ public class ChatFormController {
     FileChooser fileChooser = new FileChooser();
     private Client client;
 
-    public void initialize(){
+    public void initialize() throws IOException {
         lblUserName.setText(userName);
         txtClientMessage.requestFocus();
-
-        try {
-            client = new Client(new Socket("localhost",5000));
-        }catch (IOException e ){
-            e.printStackTrace();
-        }
+        client = new Client(new Socket("localhost",5000),userName);
         client.receiveMessageFromServer(chatListContext);
     }
 
@@ -52,7 +46,7 @@ public class ChatFormController {
             Text text = new Text(messageToSend);
             TextFlow textFlow = new TextFlow(text);
             textFlow.setStyle("-fx-background-color: rgb(3,71,210);"+"-fx-background-radius: 10px");
-            textFlow.setPadding(new Insets(5,5,5,10));
+            textFlow.setPadding(new Insets(5,10,5,10));
             text.setFill(Color.color(1,1,1));
             hBox.getChildren().add(textFlow);
             chatListContext.getChildren().add(hBox);
@@ -83,7 +77,7 @@ public class ChatFormController {
         Text text = new Text(messageFromServer);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setStyle("-fx-background-color: rgb(145,145,158);"+"-fx-background-radius: 10px");
-        textFlow.setPadding(new Insets(5,5,5,10));
+        textFlow.setPadding(new Insets(5,10,5,10));
         hBox.getChildren().add(textFlow);
 
         Platform.runLater(new Runnable() {

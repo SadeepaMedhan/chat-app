@@ -10,11 +10,11 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import static Server.Server.userName;
 
 public class LoginFormController {
     public StackPane loginFormContext;
     public JFXTextField txtUsername;
-    public static String userName;
 
 
     public void loginOnAction(ActionEvent actionEvent) throws IOException {
@@ -23,8 +23,7 @@ public class LoginFormController {
             userName = txtUsername.getText();
             Stage stage = (Stage) loginFormContext.getScene().getWindow();
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("ChatForm.fxml"))));
-            //stage.setResizable(false);
-
+            stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
         }else{

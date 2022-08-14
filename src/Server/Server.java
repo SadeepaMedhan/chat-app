@@ -1,12 +1,14 @@
 package Server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
     private final ServerSocket serverSocket;
-
+    public static String userName;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -17,9 +19,11 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 System.out.println("client connected ");
-
-                 ClientHandler clientHandler = new ClientHandler(socket);
-
+                InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String name = bufferedReader.readLine();
+                System.out.println(name);
+                 ClientHandler clientHandler = new ClientHandler(socket, name);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }

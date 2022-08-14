@@ -11,11 +11,14 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
 
-    public Client(Socket socket) {
+    public Client(Socket socket, String name) {
         try{
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+            printWriter.println(name);
+            printWriter.flush();
         }catch (IOException e ){
             e.printStackTrace();
             System.out.println("error on client");

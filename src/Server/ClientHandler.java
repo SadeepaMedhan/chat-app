@@ -3,6 +3,7 @@ package Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import static Server.Server.userName;
 
 public class ClientHandler implements Runnable {
 
@@ -12,12 +13,12 @@ public class ClientHandler implements Runnable {
     private BufferedWriter bufferedWriter;
     private String clientUsername;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, String name) {
         try{
             this.socket = socket;
             this.bufferedWriter=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername=bufferedReader.readLine().split(":")[0];
+            this.clientUsername=name;
             clientHandlers.add(this);
            broadCastMessage(clientUsername+" connected!");
         }catch (IOException e ){
