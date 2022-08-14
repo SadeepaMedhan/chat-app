@@ -15,14 +15,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Collection;
 
 import static Client.LoginFormController.userName;
 
@@ -30,67 +28,37 @@ public class ChatFormController {
     public TextField txtClientMessage;
     public Label lblUserName;
     public VBox chatListContext;
-    Socket socket = null;
-    String reply = "";
     FileChooser fileChooser = new FileChooser();
+    private Client client;
 
-    public void initialize() throws IOException {
+    public void initialize(){
         lblUserName.setText(userName);
         txtClientMessage.requestFocus();
 
-        new Thread(()->{
-            try {
-                socket = new Socket("localhost",5000);
-
-            while (true){
-                if(!reply.equals("exit")){
-                    InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String record = bufferedReader.readLine();
-                    reply = record;
-                    //System.out.println(record);
-                    HBox hBox = new HBox();
-                    hBox.setAlignment(Pos.CENTER_LEFT);
-                    hBox.setPadding(new Insets(5,5,5,10));
-                    Text text = new Text(record);
-                    TextFlow textFlow = new TextFlow(text);
-                    textFlow.setStyle("-fx-background-color: #aaaeb1; -fx-background-radius: 20px");
-                    textFlow.setPadding(new Insets(5,10,5,10));
-                    hBox.getChildren().add(textFlow);
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            chatListContext.getChildren().add(hBox);
-                        }
-                    });
-                }else{
-                    return;
-                }
-            }} catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
+        try {
+            client = new Client(new Socket("localhost",5000));
+        }catch (IOException e ){
+            e.printStackTrace();
+        }
+        client.receiveMessageFromServer(chatListContext);
     }
 
     public void sendOnAction(ActionEvent actionEvent) throws IOException {
-        String reply = txtClientMessage.getText();
-        PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
-        printWriter.println(reply);
-        printWriter.flush();
-
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.CENTER_RIGHT);
-        hBox.setPadding(new Insets(5,5,5,5));
-        Text text = new Text(reply);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: #0868a7; -fx-background-radius: 20px");
-        textFlow.setPadding(new Insets(5,10,5,10));
-        text.setFill(Color.color(1,1,1));
-
-        hBox.getChildren().add(textFlow);
-        chatListContext.getChildren().add(hBox);
-        txtClientMessage.clear();
+        String messageToSend = txtClientMessage.getText();
+        if (!messageToSend.isEmpty()){
+            HBox hBox =  new HBox();
+            hBox.setAlignment(Pos.CENTER_RIGHT );
+            hBox.setPadding(new Insets(5,10,5,10));
+            Text text = new Text(messageToSend);
+            TextFlow textFlow = new TextFlow(text);
+            textFlow.setStyle("-fx-background-color: rgb(3,71,210);"+"-fx-background-radius: 10px");
+            textFlow.setPadding(new Insets(5,5,5,10));
+            text.setFill(Color.color(1,1,1));
+            hBox.getChildren().add(textFlow);
+            chatListContext.getChildren().add(hBox);
+            client.sendMessageToServer(userName+" : "+messageToSend);
+            txtClientMessage.clear();
+        }
     }
 
     public void closeOnAction(MouseEvent mouseEvent) {
@@ -106,5 +74,23 @@ public class ChatFormController {
             ImageView imageView = new ImageView(image);
             chatListContext.getChildren().add(imageView);
         }
+    }
+    public static void  addLabel(String messageFromServer,VBox vBox){
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(5,10,5,10));
+
+        Text text = new Text(messageFromServer);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color: rgb(145,145,158);"+"-fx-background-radius: 10px");
+        textFlow.setPadding(new Insets(5,5,5,10));
+        hBox.getChildren().add(textFlow);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox.getChildren().add(hBox);
+            }
+        });
     }
 }

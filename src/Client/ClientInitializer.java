@@ -19,10 +19,10 @@ public class ClientInitializer extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("LoginForm.fxml")));
-        scene.setFill(TRANSPARENT);
+        //scene.setFill(TRANSPARENT);
         scene.getStylesheets().add("Client/styles/style.css");
         primaryStage.setScene(scene);
-        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        //primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
     }
 }
