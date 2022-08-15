@@ -3,7 +3,6 @@ package Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import static Server.Server.userName;
 
 public class ClientHandler implements Runnable {
 
@@ -24,7 +23,6 @@ public class ClientHandler implements Runnable {
         }catch (IOException e ){
             closeEverything(socket,bufferedWriter,bufferedReader);
         }
-
     }
 
 
@@ -62,7 +60,7 @@ public class ClientHandler implements Runnable {
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadCastMessage(clientUsername + "has left the chat");
+        broadCastMessage(clientUsername + " left");
     }
 
 

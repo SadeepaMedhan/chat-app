@@ -39,6 +39,28 @@ public class Client {
         }
     }
 
+    public void sendFileToServer(File file){
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
+
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
+            String fileName = file.getName();
+            byte[] fileNameBytes = fileName.getBytes();
+            byte[] fileContentBytes = new byte[(int)file.length()];
+            fileInputStream.read(fileContentBytes);
+
+            dataOutputStream.writeInt(fileNameBytes.length);
+            dataOutputStream.write(fileNameBytes);
+            dataOutputStream.writeInt(fileContentBytes.length);
+            dataOutputStream.write(fileContentBytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+    }
+
 
     public void receiveMessageFromServer(VBox vBox) {
         new Thread(new Runnable() {

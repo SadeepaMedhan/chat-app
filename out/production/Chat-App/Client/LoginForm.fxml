@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="loginFormContext" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1364.0" style="-fx-background-color: rgba(0,0,0,0.85);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.LoginFormController">
+<StackPane fx:id="loginFormContext" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1364.0" style="-fx-background-color: rgba(0,0,0,0.81);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.LoginFormController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <center>
@@ -38,6 +38,14 @@
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtHost" focusColor="#0e07f2" labelFloat="true" layoutX="50.0" layoutY="149.0" prefHeight="32.0" prefWidth="292.0" promptText="Host">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
                               </JFXTextField>
                               <JFXButton buttonType="RAISED" focusTraversable="false" onAction="#loginOnAction" prefHeight="35.0" prefWidth="205.0" style="-fx-background-color: #4167B2;" text="Log In" textFill="WHITE">
                                  <font>

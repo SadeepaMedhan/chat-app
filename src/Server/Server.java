@@ -8,7 +8,6 @@ import java.net.Socket;
 
 public class Server {
     private final ServerSocket serverSocket;
-    public static String userName;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -22,7 +21,7 @@ public class Server {
                 InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String name = bufferedReader.readLine();
-                System.out.println(name);
+                //System.out.println(name);
                  ClientHandler clientHandler = new ClientHandler(socket, name);
                 Thread thread = new Thread(clientHandler);
                 thread.start();

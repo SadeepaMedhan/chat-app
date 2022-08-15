@@ -21,19 +21,21 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
-import static Server.Server.userName;
+import java.nio.charset.StandardCharsets;
+
+import static Client.LoginFormController.userName;
+import static Client.LoginFormController.host;
 
 public class ChatFormController {
     public TextField txtClientMessage;
     public Label lblUserName;
     public VBox chatListContext;
-    FileChooser fileChooser = new FileChooser();
     private Client client;
 
     public void initialize() throws IOException {
         lblUserName.setText(userName);
         txtClientMessage.requestFocus();
-        client = new Client(new Socket("localhost",5000),userName);
+        client = new Client(new Socket(host,5000),userName);
         client.receiveMessageFromServer(chatListContext);
     }
 
@@ -61,12 +63,15 @@ public class ChatFormController {
 
     public void uploadImageOnAction(MouseEvent mouseEvent) {
         Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            System.out.println(file.getAbsolutePath());
-            Image image = new Image(getClass().getResourceAsStream(file.getAbsolutePath()));
-            ImageView imageView = new ImageView(image);
-            chatListContext.getChildren().add(imageView);
+            System.out.println(file.getName());
+            client.sendFileToServer(file);
+
+//            Image image = new Image(getClass().getResourceAsStream(file.getAbsolutePath()));
+//            ImageView imageView = new ImageView(image);
+//            chatListContext.getChildren().add(imageView);
         }
     }
     public static void  addLabel(String messageFromServer,VBox vBox){
@@ -76,7 +81,7 @@ public class ChatFormController {
 
         Text text = new Text(messageFromServer);
         TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(145,145,158);"+"-fx-background-radius: 10px");
+        textFlow.setStyle("-fx-background-color: rgb(186,186,186);"+"-fx-background-radius: 10px");
         textFlow.setPadding(new Insets(5,10,5,10));
         hBox.getChildren().add(textFlow);
 
