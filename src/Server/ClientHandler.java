@@ -34,6 +34,33 @@ public class ClientHandler implements Runnable {
             try{
                 messageFromClient=bufferedReader.readLine();
                 broadCastMessage(messageFromClient);
+
+
+                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                int fileNameLength = dataInputStream.readInt();
+                if(fileNameLength>0){
+                    byte[] fileNameByte = new byte[fileNameLength];
+                    dataInputStream.readFully(fileNameByte,0,fileNameByte.length);
+                    String fileName = new String(fileNameByte);
+                    System.out.println(fileName);
+
+                    int fileContentLength = dataInputStream.readInt();
+                    if(fileContentLength>0){
+                        byte[] fileContentByte = new byte[fileContentLength];
+                        dataInputStream.readFully(fileContentByte,0,fileContentLength);
+
+                        File fileToDownload = new File(fileName);
+                        try{
+                            FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
+                            fileOutputStream.write(fileContentByte);
+                            fileOutputStream.close();
+                        }catch (IOException e){
+                            e.printStackTrace() ;
+                        }
+
+                    }
+                }
+
             }catch (IOException e ){
                 closeEverything(socket,bufferedWriter,bufferedReader);
                 break;
