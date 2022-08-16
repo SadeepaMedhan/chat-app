@@ -66,12 +66,18 @@ public class ChatFormController {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            System.out.println("send "+file.getName());
-            client.sendFileToServer(file);
 
-//            Image image = new Image(getClass().getResourceAsStream(file.getAbsolutePath()));
-//            ImageView imageView = new ImageView(image);
-//            chatListContext.getChildren().add(imageView);
+            HBox hBox =  new HBox();
+            hBox.setAlignment(Pos.CENTER_RIGHT );
+            hBox.setPadding(new Insets(5,10,5,10));
+            Image image = new Image("file:"+file.getAbsolutePath());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            hBox.getChildren().add(imageView);
+            chatListContext.getChildren().add(hBox);
+            client.sendFileToServer(file, userName);
+            System.out.println("send "+file.getName());
         }
     }
 
@@ -94,17 +100,21 @@ public class ChatFormController {
         });
     }
 
-    public static void  addImage(File file,VBox vBox){
+    public static void  addImage(File file,VBox vBox, String name){
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5,10,5,10));
 
-        Text text = new Text(file.getName());
+        Text text = new Text(name);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setStyle("-fx-background-color: rgb(198,194,194);"+"-fx-background-radius: 10px");
         textFlow.setPadding(new Insets(5,10,5,10));
         hBox.getChildren().add(textFlow);
-
+        Image image = new Image("file:"+file.getAbsolutePath());
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        hBox.getChildren().add(imageView);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

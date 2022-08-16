@@ -34,8 +34,8 @@ public class ClientHandler implements Runnable {
             try{
                 messageFromClient=bufferedReader.readLine();
                 System.out.println("run msg "+messageFromClient);
-                if(messageFromClient.equalsIgnoreCase("file")){
-                    broadCastMessage("file");
+                if(messageFromClient.split(":")[0].equals("FILE")){
+                    downloadFile(messageFromClient.split(":")[1]);
                     //broadCastFile();
                 }else{
                     broadCastMessage(messageFromClient);
@@ -50,7 +50,6 @@ public class ClientHandler implements Runnable {
 
 
     public void broadCastMessage(String messageToSend){
-        System.out.println("server send msg "+messageToSend);
         for(ClientHandler clientHandler : clientHandlers){
             try{
                 if (!clientHandler.clientUsername.equals(clientUsername)){
@@ -65,32 +64,28 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void broadCastFile(){
+    public void broadCastFile(File file, String name){
         for(ClientHandler client : clientHandlers){
             try{
                 if (!client.clientUsername.equals(clientUsername)){
-                    client.bufferedWriter.write("file");
-                    client.bufferedWriter.newLine();
-                    client.bufferedWriter.flush();
+
+                    FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
                     DataOutputStream dataOutputStream = new DataOutputStream(client.socket.getOutputStream());
-                    DataInputStream dataInputStream = new DataInputStream(client.socket.getInputStream());
-                    int fileNameLength = dataInputStream.readInt();
-                    if(fileNameLength>0){
-                        byte[] fileNameByte = new byte[fileNameLength];
-                        dataInputStream.readFully(fileNameByte,0,fileNameByte.length);
+                    PrintWriter printWriter = new PrintWriter(client.socket.getOutputStream());
+                    printWriter.println("FILE:"+name);
+                    printWriter.flush();
 
-                        int fileLength = dataInputStream.readInt();
-                        if(fileLength>0){
-                            byte[] fileContentByte = new byte[fileLength];
-                            dataInputStream.readFully(fileContentByte,0,fileLength);
+                    String fileName = file.getName();
+                    System.out.println("broadcast "+fileName);
+                    byte[] fileNameBytes = fileName.getBytes();
+                    byte[] fileContentBytes = new byte[(int)file.length()];
+                    fileInputStream.read(fileContentBytes);
 
-                            dataOutputStream.writeInt(fileNameLength);
-                            dataOutputStream.write(fileNameByte);
-                            dataOutputStream.writeInt(fileLength);
-                            dataOutputStream.write(fileContentByte);
-
-                        }
-                    }
+                    dataOutputStream.writeInt(fileNameBytes.length);
+                    dataOutputStream.write(fileNameBytes);
+                    dataOutputStream.writeInt(fileContentBytes.length);
+                    dataOutputStream.write(fileContentBytes);
+                    dataOutputStream.flush();
                 }
             }catch (IOException e){
                 closeEverything(socket,bufferedWriter,bufferedReader);
@@ -98,7 +93,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void downloadFile() throws IOException {
+    public void downloadFile(String name) throws IOException {
         DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
         int fileNameLength = dataInputStream.readInt();
         if(fileNameLength>0){
@@ -119,6 +114,8 @@ public class ClientHandler implements Runnable {
                     fileOutputStream.write(fileContentByte);
                     fileOutputStream.close();
                     System.out.println("download");
+
+                    broadCastFile(fileToDownload, name);
                 }catch (IOException e){
                     e.printStackTrace() ;
                 }
