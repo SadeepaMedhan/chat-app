@@ -41,8 +41,11 @@ public class Client {
 
     public void sendFileToServer(File file){
         try {
-            FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+            printWriter.println("file");
+            printWriter.flush();
 
+            FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
             String fileName = file.getName();
@@ -54,7 +57,7 @@ public class Client {
             dataOutputStream.write(fileNameBytes);
             dataOutputStream.writeInt(fileContentBytes.length);
             dataOutputStream.write(fileContentBytes);
-
+            dataOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -69,7 +72,39 @@ public class Client {
                 while (socket.isConnected()) {
                     try {
                         String messageFromClient  = bufferedReader.readLine();
-                        ChatFormController.addLabel(messageFromClient,vBox);
+                        if(!messageFromClient.equalsIgnoreCase("file")){
+                            ChatFormController.addLabel(messageFromClient,vBox);
+                        }else{
+
+                            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                            int fileNameLength = dataInputStream.readInt();
+                            if(fileNameLength>0){
+                                System.out.println(fileNameLength);
+                                byte[] fileNameByte = new byte[fileNameLength];
+                                dataInputStream.readFully(fileNameByte,0,fileNameByte.length);
+                                String fileName = new String(fileNameByte);
+                                System.out.println("client receive "+ fileName);
+
+                                int fileContentLength = dataInputStream.readInt();
+                                if(fileContentLength>0){
+                                    byte[] fileContentByte = new byte[fileContentLength];
+                                    dataInputStream.readFully(fileContentByte,0,fileContentLength);
+                                    File fileToDownload = new File(fileName);
+                                    ChatFormController.addImage(fileToDownload,vBox);
+
+//                                    File fileToDownload = new File(fileName);
+//                                    try{
+//                                        FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
+//                                        fileOutputStream.write(fileContentByte);
+//                                        fileOutputStream.close();
+//                                        System.out.println("download");
+//                                    }catch (IOException e){
+//                                        e.printStackTrace() ;
+//                                    }
+
+                                }
+                            }
+                        }
                     }catch (IOException e){
                         e.printStackTrace();
                         System.out.println("error reading message form client");

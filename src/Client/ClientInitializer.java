@@ -22,6 +22,7 @@ public class ClientInitializer extends Application {
         scene.setFill(TRANSPARENT);
         scene.getStylesheets().add("Client/styles/style.css");
         primaryStage.setScene(scene);
+        //primaryStage.setFullScreen(true);
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
     }

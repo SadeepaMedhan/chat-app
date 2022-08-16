@@ -47,7 +47,7 @@ public class ChatFormController {
             hBox.setPadding(new Insets(5,10,5,10));
             Text text = new Text(messageToSend);
             TextFlow textFlow = new TextFlow(text);
-            textFlow.setStyle("-fx-background-color: rgb(3,71,210);"+"-fx-background-radius: 10px");
+            textFlow.setStyle("-fx-background-color: #7E308E;"+"-fx-background-radius: 10px");
             textFlow.setPadding(new Insets(5,10,5,10));
             text.setFill(Color.color(1,1,1));
             hBox.getChildren().add(textFlow);
@@ -66,7 +66,7 @@ public class ChatFormController {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            System.out.println(file.getName());
+            System.out.println("send "+file.getName());
             client.sendFileToServer(file);
 
 //            Image image = new Image(getClass().getResourceAsStream(file.getAbsolutePath()));
@@ -74,6 +74,7 @@ public class ChatFormController {
 //            chatListContext.getChildren().add(imageView);
         }
     }
+
     public static void  addLabel(String messageFromServer,VBox vBox){
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
@@ -81,7 +82,26 @@ public class ChatFormController {
 
         Text text = new Text(messageFromServer);
         TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(186,186,186);"+"-fx-background-radius: 10px");
+        textFlow.setStyle("-fx-background-color: rgb(198,194,194);"+"-fx-background-radius: 10px");
+        textFlow.setPadding(new Insets(5,10,5,10));
+        hBox.getChildren().add(textFlow);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox.getChildren().add(hBox);
+            }
+        });
+    }
+
+    public static void  addImage(File file,VBox vBox){
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(5,10,5,10));
+
+        Text text = new Text(file.getName());
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setStyle("-fx-background-color: rgb(198,194,194);"+"-fx-background-radius: 10px");
         textFlow.setPadding(new Insets(5,10,5,10));
         hBox.getChildren().add(textFlow);
 
