@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 import static Client.LoginFormController.userName;
 import static Client.LoginFormController.host;
@@ -37,6 +36,11 @@ public class ChatFormController {
         txtClientMessage.requestFocus();
         client = new Client(new Socket(host,5000),userName);
         client.receiveMessageFromServer(chatListContext);
+
+//        FileOutputStream fileOutputStream = new FileOutputStream("src/User.ser");
+//        ObjectOutputStream oos = new ObjectOutputStream(fileOutputStream);
+//        User user = new User(userName,host,"5000");
+//        oos.writeObject(user);
     }
 
     public void sendOnAction(ActionEvent actionEvent) throws IOException {
@@ -102,19 +106,19 @@ public class ChatFormController {
 
     public static void  addImage(File file,VBox vBox, String name){
         HBox hBox = new HBox();
+        VBox vBox1 = new VBox();
+        vBox1.setStyle("-fx-background-color: rgb(198,194,194);"+"-fx-background-radius: 5px");
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5,10,5,10));
-
         Text text = new Text(name);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(198,194,194);"+"-fx-background-radius: 10px");
-        textFlow.setPadding(new Insets(5,10,5,10));
-        hBox.getChildren().add(textFlow);
+        vBox1.getChildren().add(text);
         Image image = new Image("file:"+file.getAbsolutePath());
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
-        hBox.getChildren().add(imageView);
+        vBox1.setPadding(new Insets(5,10,5,10));
+        vBox1.getChildren().add(imageView);
+        hBox.getChildren().add(vBox1);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -122,4 +126,21 @@ public class ChatFormController {
             }
         });
     }
+}
+
+class User implements Serializable{
+    public String name;
+    public String host;
+    public String port;
+
+    public User(String name,String host,String port){
+        this.name=name;
+        this.host=host;
+        this.port=port;
+    }
+
+    public void printUser(){
+        System.out.println(name+", "+host+":"+port);
+    }
+
 }

@@ -5,8 +5,6 @@ import javafx.scene.layout.VBox;
 import java.io.*;
 import java.net.Socket;
 
-import static Client.LoginFormController.userName;
-
 public class Client {
 
     private Socket socket;
