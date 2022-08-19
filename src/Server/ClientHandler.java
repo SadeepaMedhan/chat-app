@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
         while(socket.isConnected()){
             try{
                 messageFromClient=bufferedReader.readLine();
-                //System.out.println("run msg "+messageFromClient);
+                System.out.println("run msg "+messageFromClient);
                 if(messageFromClient.split(":")[0].equals("FILE")){
                     downloadFile(messageFromClient.split(":")[1]);
                     //broadCastFile();
@@ -42,6 +42,7 @@ public class ClientHandler implements Runnable {
                 }
 
             }catch (IOException e ){
+                System.out.println(e.getMessage());
                 closeEverything(socket,bufferedWriter,bufferedReader);
                 break;
             }
@@ -64,9 +65,10 @@ public class ClientHandler implements Runnable {
     }
 
     public void broadCastFile(File file, String name){
+        System.out.println(name+" image from");
         for(ClientHandler client : clientHandlers){
             try{
-                if (!client.clientUsername.equals(clientUsername)){
+                if (!client.clientUsername.equals(name)){
 
                     FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
                     DataOutputStream dataOutputStream = new DataOutputStream(client.socket.getOutputStream());
@@ -75,7 +77,6 @@ public class ClientHandler implements Runnable {
                     printWriter.flush();
 
                     String fileName = file.getName();
-                    System.out.println("broadcast "+fileName);
                     byte[] fileNameBytes = fileName.getBytes();
                     byte[] fileContentBytes = new byte[(int)file.length()];
                     fileInputStream.read(fileContentBytes);
@@ -85,8 +86,11 @@ public class ClientHandler implements Runnable {
                     dataOutputStream.writeInt(fileContentBytes.length);
                     dataOutputStream.write(fileContentBytes);
                     dataOutputStream.flush();
+                    System.out.println(client.clientUsername+" to broadcast "+fileName);
+
                 }
             }catch (IOException e){
+                System.out.println("upload "+e.getMessage());
                 closeEverything(socket,bufferedWriter,bufferedReader);
             }
         }
@@ -116,6 +120,7 @@ public class ClientHandler implements Runnable {
 
                     broadCastFile(fileToDownload, name);
                 }catch (IOException e){
+                    System.out.println("download "+e.getMessage());
                     e.printStackTrace() ;
                 }
             }

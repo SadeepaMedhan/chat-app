@@ -4,9 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,7 +41,7 @@ public class ChatFormController {
 //        oos.writeObject(user);
     }
 
-    public void sendOnAction(ActionEvent actionEvent) throws IOException {
+    public void sendOnAction(ActionEvent actionEvent) {
         String messageToSend = txtClientMessage.getText();
         if (!messageToSend.isEmpty()){
             HBox hBox =  new HBox();
@@ -128,19 +126,3 @@ public class ChatFormController {
     }
 }
 
-class User implements Serializable{
-    public String name;
-    public String host;
-    public String port;
-
-    public User(String name,String host,String port){
-        this.name=name;
-        this.host=host;
-        this.port=port;
-    }
-
-    public void printUser(){
-        System.out.println(name+", "+host+":"+port);
-    }
-
-}

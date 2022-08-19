@@ -77,8 +77,10 @@ public class Client {
                             if(fileNameLength>0){
                                 System.out.println(fileNameLength);
                                 System.out.println(messageFromClient.split(":")[1]);
+
                                 byte[] fileNameByte = new byte[fileNameLength];
                                 dataInputStream.readFully(fileNameByte,0,fileNameByte.length);
+                                System.out.println(fileNameByte.length);
                                 String fileName = new String(fileNameByte);
                                 String senderName = messageFromClient.split(":")[1];
                                 System.out.println(senderName+" client receive "+ fileName);
@@ -89,16 +91,6 @@ public class Client {
                                     dataInputStream.readFully(fileContentByte,0,fileContentLength);
                                     File fileToDownload = new File(fileName);
                                     ChatFormController.addImage(fileToDownload,vBox,senderName);
-
-//                                    File fileToDownload = new File(fileName);
-//                                    try{
-//                                        FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
-//                                        fileOutputStream.write(fileContentByte);
-//                                        fileOutputStream.close();
-//                                        System.out.println("download");
-//                                    }catch (IOException e){
-//                                        e.printStackTrace() ;
-//                                    }
 
                                 }
                             }
