@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="642.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ChatFormController">
+   <children>
+      <Separator layoutX="25.0" layoutY="85.0" prefHeight="4.0" prefWidth="492.0" />
+      <TextField fx:id="txtClientMessage" layoutX="24.0" layoutY="577.0" prefHeight="37.0" prefWidth="370.0">
+         <padding>
+            <Insets left="40.0" />
+         </padding></TextField>
+      <ImageView fitHeight="27.0" fitWidth="36.0" layoutX="33.0" layoutY="582.0" onMouseClicked="#uploadImageOnAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/icon/camaraIcon.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView blendMode="MULTIPLY" fitHeight="75.0" fitWidth="93.0" layoutX="25.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/playTechLogo1.jpg" />
+         </image>
+      </ImageView>
+      <JFXButton buttonType="RAISED" focusTraversable="false" layoutX="402.0" layoutY="577.0" onAction="#sendOnAction" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #7E308E;" text="Send" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/icon/sendIcon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label layoutX="119.0" layoutY="44.0" prefHeight="45.0" prefWidth="245.0" text="Play Tech Pvt Ltd">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="27.0" fitWidth="33.0" layoutX="495.0" layoutY="13.0" onMouseClicked="#closeOnAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/icon/close.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <Label layoutX="25.0" layoutY="114.0" prefHeight="27.0" prefWidth="101.0" text="Chat Room" textFill="#656262">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblUserName" alignment="CENTER_RIGHT" layoutX="418.0" layoutY="112.0" prefHeight="27.0" prefWidth="101.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ScrollPane layoutX="24.0" layoutY="139.0" prefHeight="424.0" prefWidth="492.0">
+         <content>
+            <VBox fx:id="chatListContext" prefHeight="418.0" prefWidth="488.0" style="-fx-border-color: #BDBDBD;" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

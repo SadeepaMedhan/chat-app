@@ -70,13 +70,12 @@ public class Client {
             public void run() {
                 while (socket.isConnected()) {
                     try {
-                        String messageFromClient  = bufferedReader.readLine();
+                        String messageFromClient = bufferedReader.readLine();
                         if(messageFromClient.split(":")[0].equals("FILE")){
                             DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
                             int fileNameLength = dataInputStream.readInt();
                             if(fileNameLength>0){
                                 System.out.println(fileNameLength);
-                                System.out.println(messageFromClient.split(":")[1]);
 
                                 byte[] fileNameByte = new byte[fileNameLength];
                                 dataInputStream.readFully(fileNameByte,0,fileNameByte.length);
@@ -91,7 +90,6 @@ public class Client {
                                     dataInputStream.readFully(fileContentByte,0,fileContentLength);
                                     File fileToDownload = new File(fileName);
                                     ChatFormController.addImage(fileToDownload,vBox,senderName);
-
                                 }
                             }
                         }else{

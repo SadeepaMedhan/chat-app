@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
         while(socket.isConnected()){
             try{
                 messageFromClient=bufferedReader.readLine();
-                System.out.println("run msg "+messageFromClient);
+                //System.out.println("run msg "+messageFromClient);
                 if(messageFromClient.split(":")[0].equals("FILE")){
                     downloadFile(messageFromClient.split(":")[1]);
                     //broadCastFile();
